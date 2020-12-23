@@ -19,7 +19,7 @@ IB: Interface Builder
 
 ## IB使用: 
 
-#1.xib的加载方法
++ 1.xib的加载方法
 ```         
 
 UINib *nib = [UINib nibWithNibName:@"XibView" bundle:nil];
@@ -27,18 +27,18 @@ NSArray *objs = [nib instantiateWithOwner:nil options:nil];
 [self.view addSubview:objs[0]];
 
 ```
-#2.SB的加载方法
++ 2.SB的加载方法
  ```
  SecVC *secVC = [[UIStoryboard storyboardWithName:@"Demo" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SecVC"];
  
  ```
- #3.操作就是拖拽,上手就知道
- #4.UIView创建的时候,不带xib文件, 需要单独创建,创建后关联"源文件" (在Custom Class中设置)
- #5.IBOutlet: 链接属性 ; IBAction: 链接AddTarget,拖拽至关联的文件中
- #6.UIVIewController创建的时候带xib,自动关联
- #7.File's Owner:  可以理解为代理,谁拥有就可以直接在.h/.m中使用
- #8.Is Initial View Controller:  勾选后,默认加载这个SB
- #9.UINIb加载会缓存,  bundle每次都会加载,所以推荐使用INIb加载
++ 3.操作就是拖拽,上手就知道
++ 4.UIView创建的时候,不带xib文件, 需要单独创建,创建后关联"源文件" (在Custom Class中设置)
++ 5.IBOutlet: 链接属性 ; IBAction: 链接AddTarget,拖拽至关联的文件中
++ 6.UIVIewController创建的时候带xib,自动关联
++ 7.File's Owner:  可以理解为代理,谁拥有就可以直接在.h/.m中使用
++ 8.Is Initial View Controller:  勾选后,默认加载这个SB
++ 9.UINIb加载会缓存,  bundle每次都会加载,所以推荐使用INIb加载
 
 ##  IB中的XIB: 
 #1.常用UILabel/UIbutton/UIView/UItableview/UIcollection 
