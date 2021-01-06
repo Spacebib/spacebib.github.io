@@ -19,4 +19,4 @@
 
 ## 领域驱动开发 (DDD:Domain-Driven Design)
 
-+ [需要注意的地方](https://spacebib.github.io/note_of_add.md)
++ [需要注意的地方](https://spacebib.github.io/note_of_ddd.md)
