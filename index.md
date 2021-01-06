@@ -16,3 +16,7 @@
 
 + [解决计步器定位问题](https://spacebib.github.io/lzh_GPS_solution)
 + [解决时区对比问题](https://spacebib.github.io/lzh_working_with_timezone)
+
+## 领域驱动开发 (DDD:Domain-Driven Design)
+
++ [需要注意的地方](https://spacebib.github.io/note_of_add.md)
