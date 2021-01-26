@@ -110,5 +110,34 @@
   }
   ```
   加锁去避免这一情况
+  
+* #### 其他尝试
+  在 `Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository` 将如下代码
+  ```php
+  public function getLatestAggregateVersion(string $aggregateUuid): int
+  {
+      return $this->storedEventModel::query()
+          ->uuid($aggregateUuid)
+          ->max('aggregate_version') ?? 0;
+  }
+  ```
+  修改为
+  ```php
+  public function getLatestAggregateVersion(string $aggregateUuid): int
+  {
+      return $this->storedEventModel::query()
+          ->uuid($aggregateUuid)
+          ->count() ?? 0;
+  }
+  ```
+  最后还是会重复写入 aggregateVersion
+
+* #### 总结
+  只要涉及查询一条数据,然后用这条数据进行其他逻辑操作,在并发情况下必然是有问题的。必须查询的时候要加锁。可以使用数据库的悲观锁,以及自己定义的乐观锁去解决此类问题。
+  我们加入 `lockForUpdate()` 去解决此类问题时候,有几个注意点：
+  > * 只有在事务中才会生效。
+  > * 当 sql 语句涉及到索引 , 并用索引作为查询或判断的依据时，那么 mysql 会用行级锁锁定所要修改的行，否则会使用表锁锁住整张表，因此在使用时一定要注意使用索引，否则会导致高的并发问题。
+  > * 性能问题
+    
 
   
