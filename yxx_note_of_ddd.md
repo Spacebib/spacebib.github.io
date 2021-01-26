@@ -79,31 +79,34 @@
 * #### 解决方法
   在 `Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository` 找到如下代码
   ```php
-  public function retrieveAll(string $uuid = null): LazyCollection
+  public function retrieveAllAfterVersion(int $version, string $uuid): LazyCollection
   {
       /** @var \Illuminate\Database\Query\Builder $query */
-      $query = $this->storedEventModel::query();
+      $query = $this->storedEventModel::query()
+          ->uuid($uuid)
+          ->afterVersion($version);
 
-      if ($uuid) {
-          $query->uuid($uuid);
-      }
-
-      return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+      return $query
+          ->orderBy('id')
+          ->cursor()
+          ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
   }
   ```
 
   修改为：
-  ```php
-  public function retrieveAll(string $uuid = null): LazyCollection
+  
+   ```php
+  public function retrieveAllAfterVersion(int $version, string $uuid): LazyCollection
   {
       /** @var \Illuminate\Database\Query\Builder $query */
-      $query = $this->storedEventModel::query();
+      $query = $this->storedEventModel::query()
+          ->uuid($uuid)
+          ->afterVersion($version)->lockForUpdate();
 
-      if ($uuid) {
-          $query->uuid($uuid)->lockForUpdate();
-      }
-
-      return $query->orderBy('id')->cursor()->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
+      return $query
+          ->orderBy('id')
+          ->cursor()
+          ->map(fn (EloquentStoredEvent $storedEvent) => $storedEvent->toStoredEvent());
   }
   ```
   加锁去避免这一情况
