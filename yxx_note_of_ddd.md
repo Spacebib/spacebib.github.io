@@ -145,7 +145,7 @@
 在上图中,
 ProcessAwaitingReservationSaga 监听完 OccupiedByBooking 调用 reserve 方法，
 ProcessAwaitingWashReservationSaga 监听完 OccupiedByBooking 调用 washReserve 方法。
-但是 OccupiedByBooking 一旦被调用。这两个 sage 都会被监听。但其实我只需要给其中一个 sage。   
+但是 OccupiedByBooking 一旦被调用。这两个 sage 都会监听 OccupiedByBooking。但其实我只需要让其中一个 sage 去监听。   
 
 #### 我的解决思路
   通过 ```php AggregateRoot::retrieveRoot($event->bookingAggregateId)->getAppliedEvents() ``` 获取相关对应 aggregate_uuid 的最近相关的事件。
