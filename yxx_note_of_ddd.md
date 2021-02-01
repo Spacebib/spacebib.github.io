@@ -139,5 +139,16 @@
   > * 当 sql 语句涉及到索引 , 并用索引作为查询或判断的依据时，那么 mysql 会用行级锁锁定所要修改的行，否则会使用表锁锁住整张表，因此在使用时一定要注意使用索引，否则会导致高的并发问题。
   > * 性能问题
     
+### 多个 Sage 监听同一个 event 问题
+![](http://www.plantuml.com/plantuml/png/dPAzJiCm58LtFyLzWIoC7IArGXK34eYYBdHnugjoHM97ZXFQcGM91IHWuGKO62eX8G6lqnyUWqQ9urO9Ah15iUztphd7Xao4S88fwXo1Guxd54R80ZLX2TU6GaguDD1JweBaEDtwkQyfHrqT7L9gje-79QkRSufuG14PmfIX553G6S-CabaSe6Pddcy5e5EP6KJA770f8jGZ-JMxMjq_ZsIYLOXfMbxXXfI4vUFxylM1CGlm_AOjw1oNWzrBldOXnnk00HzpS0fSY5DL35bma-Rv4t1sgw-k45XDzjTvKS3yusR--SPQ0Mvyfx7LqztYzcLnFOEcqd3FghZqhLlVfUFogp3CacblMW7j5bgfsuk0dL70PJagP0X5BLGkhSu1a_OUuPT5WiPOvTZNAjuiyuSO_wgZ4Q5kt9Nn1x0jG9VFtpvhzWq0)
+![](http://www.plantuml.com/plantuml/png/dPCzJiD048NxFSLS81UWY9G8HHH8841Ga6RY7IKZd5rhT-qaDGqI3KX0mmKeA28X8G7NoTynY9Mi7ME34bhFxlVclRTsx4A24x9a4WA400qCqFP4Hmz5XCPnm14g1qsjhrXrRU7Zlk64p7fqoDOLn-VKuo2aHe8SOeT3TanMa9AGqWN6Jgkuto4ZBcjrBm1xnqO7PEt5SetLOkXOgmDKCYJJLelnzVpXfQsYocCmU_gOlJqAuNcrUddBJACnmELIgli3SefTX5m9fKmFh0bdEcLudJAyLXz2RcRZOaDAaglRhMKY967oUJlvUXULa58UV-ywVxwVthrERyPGhUYrybWgszb6BGz61q4SZPgZDTHdKaaknW9RcOBSrL4gnIGpiLM4cHyOLXSDEpGDXleweOq0MqRtDzl-nTc_kogvofv4tjEESD_D89kI_oN4Dm00)
+在上图中,
+ProcessAwaitingReservationSaga 监听完 OccupiedByBooking 调用 reserve 方法，
+ProcessAwaitingWashReservationSaga 监听完 OccupiedByBooking 调用 washReserve 方法。
+但是 OccupiedByBooking 一旦被调用。这两个 sage 都会被监听。但其实我只需要给其中一个 sage。   
 
-  
+#### 我的解决思路
+  通过 ```php AggregateRoot::retrieveRoot($event->bookingAggregateId)->getAppliedEvents() ``` 获取相关对应 aggregate_uuid 的最近相关的事件。
+  判断他的开始事件是什么。然后对应的 saga 执行下一步。
+
+
