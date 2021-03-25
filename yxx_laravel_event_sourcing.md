@@ -367,3 +367,4 @@ class Projectionist
     }
 ```
 如果我们不希望循环执行所有  Projector 和 Reactor 时候被中断,可以在 event-sourcing.php  配置文件的 catch_exceptions 设置为 true,然后在 Projector 和 Reactor 自定义 handleException 方法处理我们的异常。
+通过阅读以上代码可知 [Laravel-Event-Sourcing](https://spatie.be/docs/laravel-event-sourcing/v4/introduction) 的异步是针对事件异步，不是针对监听这个事件的 Projector 和 Reactor 进行的异步。这一点是需要特别注意的。
