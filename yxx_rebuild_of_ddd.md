@@ -104,7 +104,6 @@ class WaitGroup
 ```
 
 ### 自己定义 Rebuild  核心代码
-* 执行流程图
 
 * RebuilderBase
   当调用 `RebuilderBase` 的 `handle` 方法，将获取到不同 `aggregate_uuid`，再把不同的`aggregate_uuid` 赋值给 `RebuilderBase`自身以后，将 `RebuilderBase` 自身作为参数传递给 `RebuilderJob`队列。在队列中就可以调用`RebuilderBase` 自身的`handleStoredEvents`方法进行事件重播操作。看代码要理解的是 `RebuilderBase` 的`handleStoredEvents`方法是在队列里面执行的。
