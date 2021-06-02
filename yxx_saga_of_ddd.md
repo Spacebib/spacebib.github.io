@@ -21,6 +21,7 @@
 通过 saga 异步的方式保证一致性
 
 ![Laravel](https://cdn.learnku.com/uploads/images/202106/02/43464/pnbWIIKZRu.png!large)
+
 saga 的方式我们是通过逻辑去保证一致性，在上图的步骤9 `restockFromRollback` 方法其实是通过逻辑将先前扣除的库存加回来，这样的好处是：
 * 不用经过数据库的事物去保证一致性
 * Saga 的每一步通过异步去处理，提升效率
