@@ -15,12 +15,14 @@
 通过数据库事物保证数据一致性
 
 ![Laravel](https://cdn.learnku.com/uploads/images/202106/02/43464/zduoeuzJgt.png!large)
+
 如上图所示，通过代码我们解决了数据一致性,在项目中我们开始也是这么解决的，但是会带来新的问题：因为我们使用的是 `event-sourcing` 本身,然后事物里面包含的肯定远比上面的逻辑更复杂，导致这个事物运行的时间很长，产生各种脏读，不可重复读，产生一些不可控的问题。
 
 * #### 第三阶段
 通过 saga 异步的方式保证一致性
 
 ![Laravel](https://cdn.learnku.com/uploads/images/202106/02/43464/pnbWIIKZRu.png!large)
+
 saga 的方式我们是通过逻辑去保证一致性，在上图的步骤9 `restockFromRollback` 方法其实是通过逻辑将先前扣除的库存加回来，这样的好处是：
 * 不用经过数据库的事物去保证一致性
 * Saga 的每一步通过异步去处理，提升效率
