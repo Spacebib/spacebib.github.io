@@ -37,7 +37,7 @@ class AggregateUuid
 {
 }
 
-// 限制 AggregateUuid Attribute 只可以注解在 类 上
+// 限制 HandledBy Attribute 只可以注解在 类 上
 #[Attribute(Attribute::TARGET_CLASS)]
 class HandledBy
 {
