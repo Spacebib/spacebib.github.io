@@ -9,6 +9,27 @@ master 通过 `proc_open(php artisan horizon:supervisor)` (Laravel\Horizon\Conso
 supervisor 通过 `proc_open(php artisan horizon:work)`  启动 worker 进程。
 
 supervisor 进程启动后，**第一时间会试图使 worker 进程的数量达到最大值**。之后每隔 cooldown 时间有一次机会调整 woker 进程的数量。
+```PHP
+// src/Console/SupervisorCommand.php
+protected function start($supervisor)
+{
+    if ($supervisor->options->nice) {
+        proc_nice($supervisor->options->nice);
+    }
+
+    $supervisor->handleOutputUsing(function ($type, $line) {
+        $this->output->write($line);
+    });
+
+    $supervisor->working = ! $this->option('paused');
+
+    $supervisor->scale(max(
+        0, $this->option('max-processes') - $supervisor->totalSystemProcessCount()
+    ));
+
+    $supervisor->monitor();
+}
+```
 ### 调度策略
 - false
    将使用默认的 Laravel 行为，它按照配置中列出的顺序处理队列。
