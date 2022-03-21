@@ -3,18 +3,18 @@
 ## Model
 ```
     WasherTeam
-        id
-        name
+	id
+	name
 
-	VehicleLocationArea
-		id
-		name
-		lat_lng
+    VehicleLocationArea
+	id
+	name
+	lat_lng
 
-	WasherTeamArea（中间表）
-		id,
-		washer_team_id,
-		area_id
+    WasherTeamArea（中间表）
+	id,
+	washer_team_id,
+	area_id
 ```
 
 ## 问题复现
@@ -23,8 +23,10 @@
 
 class WasherTeam extends Model
 {
+
   public function areas(): BelongsToMany
- {  return $this->belongsToMany(VehicleLocationArea::class, WasherTeamArea::class, 'washer_team_id', 'area_id');
+  {  
+     return $this->belongsToMany(VehicleLocationArea::class, WasherTeamArea::class, 'washer_team_id', 'area_id');
   }
 
 }
@@ -56,16 +58,16 @@ where
 public function newQuery()
 {
   $raw = 'ST_AsText(lat_lng) as lat_lng ';
- return parent::newQuery()->addSelect('*', DB::raw($raw));
+  return parent::newQuery()->addSelect('*', DB::raw($raw));
 }
 ```
 
 ## 解决办法
-加上表明前缀
+加上表名前缀
 ```php
 public function newQuery()
 {
   $raw = 'ST_AsText(lat_lng) as lat_lng';
- return parent::newQuery()->addSelect("{$this->getTable()}.*", DB::raw($raw));
+  return parent::newQuery()->addSelect("{$this->getTable()}.*", DB::raw($raw));
 }
 ```
